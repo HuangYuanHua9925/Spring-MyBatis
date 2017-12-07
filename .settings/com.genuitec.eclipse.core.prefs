@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+validator.Checked=src/main/webapp/resources/js/jquery.min.js,target/SpringMyBatis-0.0.1-SNAPSHOT/resources/js/jquery.min.js,src/main/java/com/yuan/www/service/impl/TeacherServiceImpl.java,src/main/webapp/resources/js/echarts.js
+validator.Unchecked=

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd    	
+     	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+     	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd 
+     	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd
+     	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd"
+	default-lazy-init="false">
+
+
+	<!-- 加载spring连接数据库配置文件 -->
+	<context:property-placeholder
+		ignore-unresolvable="true" location="classpath:spring-jdbc.properties" />
+
+	<!--配置数据源 -->
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+		destroy-method="close">
+		<!-- Connection Info -->
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- Connection Pooling Info -->
+		<property name="initialSize" value="${jdbc.pool.initialSize}" />
+		<property name="minIdle" value="${jdbc.pool.minIdle}" />
+		<property name="maxActive" value="${jdbc.pool.maxActive}" />
+		<property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="false" />
+		<property name="validationQuery" value="SELECT 1" />
+
+		<!-- 连接Idle一个小时后超时 -->
+		<property name="timeBetweenEvictionRunsMillis" value="3600000" />
+		<property name="minEvictableIdleTimeMillis" value="3600000" />
+
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="60" />
+		<property name="logAbandoned" value="false" />
+	</bean>
+
+
+	<!-- 配置MyBatis的SqlSessionFactory -->
+	<bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 扫描MyBatis的.xml文件 -->
+		<property name="mapperLocations" value="classpath:com/yuan/www/mapper/*.xml"></property>
+		<!-- 扫描MyBatis的配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+
+	<!-- 用于扫描Dao层的接口，并产生实例 -->
+	<bean name="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 设置扫描的范围 -->
+		<property name="basePackage" value="com.yuan.www.dao"></property>
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean name="transationManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!-- 事务注解驱动，标注@Transactional的类和方法将具有事务性 -->
+	<tx:annotation-driven transaction-manager="transationManager" />
+
+</beans>
