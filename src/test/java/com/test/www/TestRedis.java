@@ -1,12 +1,10 @@
 package com.test.www;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.core.RedisTemplate;
 
 public class TestRedis {
