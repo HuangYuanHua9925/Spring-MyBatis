@@ -13,6 +13,15 @@ public class Teacher implements Serializable {
 
 	private String name;
 
+	@Override
+	public String toString() {
+		return "Teacher [id=" + id + ", name=" + name + ", password="
+				+ password + ", position=" + position + ", loginTime="
+				+ loginTime + ", tel=" + tel + ", sex=" + sex + ", avater="
+				+ avater + ", nationality=" + nationality + ", height="
+				+ height + ", weight=" + weight + ", school=" + school + "]";
+	}
+
 	private String password;
 
 	private String position;

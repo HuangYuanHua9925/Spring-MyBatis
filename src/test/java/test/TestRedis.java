@@ -1,4 +1,4 @@
-package com.test.www;
+package test;
 
 import java.util.Collection;
 import java.util.Map;

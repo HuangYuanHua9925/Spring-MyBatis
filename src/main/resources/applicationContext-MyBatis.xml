@@ -50,10 +50,10 @@
 	<!-- 配置MyBatis的SqlSessionFactory -->
 	<bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<!-- 扫描MyBatis的.xml文件 -->
-		<property name="mapperLocations" value="classpath:com/yuan/www/mapper/*.xml"></property>
+		<!-- 扫描MyBatis的.xml文件 
+		<property name="mapperLocations" value="classpath:com/yuan/www/mapper/*.xml"></property>-->
 		<!-- 扫描MyBatis的配置文件 -->
-		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property> 
 	</bean>
 
 	<!-- 用于扫描Dao层的接口，并产生实例 -->

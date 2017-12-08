@@ -1,23 +1,28 @@
 package com.yuan.www.dao;
 
-import java.util.List;
-import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.UpdateProvider;
+
+import com.yuan.www.dao.provider.ExamineeProvider;
 import com.yuan.www.model.Examinee;
 
 public interface ExamineeMapper {
+	
+	@Delete("delete from tb_examinee where id=#{id}")
+	int deleteByPrimaryKey(@Param("id") Integer id);
 
-	int deleteByPrimaryKey(Integer id);
+	@InsertProvider(type = ExamineeProvider.class, method = "save")
+	@Options(useGeneratedKeys = true, keyColumn = "id")
+	int save(Examinee examinee);
 
-	int insert(Examinee record);
+	@Select("select * from tb_examinee where id=#{id}")
+	Examinee selectById(@Param("id") Integer id);
 
-	int insertSelective(Examinee record);
-
-	Examinee selectByPrimaryKey(Integer id);
-
-	int updateByPrimaryKeySelective(Examinee record);
-
-	int updateByPrimaryKey(Examinee record);
-
-	List<Examinee> selectAll(Map<String, Object> map);
+	@UpdateProvider(type = ExamineeProvider.class, method = "update")
+	int update(Examinee examinee);
 }

@@ -3,27 +3,36 @@ package com.yuan.www.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.UpdateProvider;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.test.annotation.IfProfileValue;
 
+import com.yuan.www.dao.provider.ExaminationsProvider;
 import com.yuan.www.model.Examinations;
 
 public interface ExaminationsMapper {
 
-	int deleteByPrimaryKey(Integer id);
+	@Delete("delete from tb_examinations where id=#{id}")
+	int deleteById(@Param("id") Integer id);
 
-	int insert(Examinations record);
+	@InsertProvider(type = ExaminationsProvider.class, method = "save")
+	@Options(useGeneratedKeys = true, keyColumn = "id")
+	int save(Examinations examinations);
 
-	int insertSelective(Examinations record);
+	@Select("select * from tb_examinations where id=#{id}")
+	Examinations selectById(@Param("id") Integer id);
 
-	Examinations selectByPrimaryKey(Integer id);
+	@UpdateProvider(type = ExaminationsProvider.class, method = "update")
+	int updateByiId(Examinations examinations);
 
-	int updateByPrimaryKeySelective(Examinations record);
-
-	int updateByPrimaryKey(Examinations record);
-
-	
-	@Select("select * from tb_examinations order by ${name}")
+	@Select("select * from tb_examinations order by ${col}")
 	@ResultType(com.yuan.www.model.Examinations.class)
-	List<Examinations> selectById(Map<String, Object> map);
+	List<Examinations> selectOrderBy(Map<String, Object> map);
 }
