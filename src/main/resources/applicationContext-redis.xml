@@ -13,48 +13,58 @@
 	default-lazy-init="false">
 
 
-	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
-	<cache:annotation-driven cache-manager="cacheManager" />
+	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效， -->
+		<cache:annotation-driven />
+	<!-- <cache:annotation-driven  cache-manager="cacheManager"> -->
 
-	<context:property-placeholder
-		ignore-unresolvable="true" location="classpath:spring-redis.properties" />
+		<context:property-placeholder
+			ignore-unresolvable="true" location="classpath:spring-redis.properties" />
 
-	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-	</bean>
+		<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		</bean>
 
-	<!-- redis服务器中心 -->
-	<bean id="connectionFactory"
-		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<property name="poolConfig" ref="poolConfig" />
-		<property name="port" value="${redis.port}" />
-		<property name="hostName" value="${redis.host}" />
-		<property name="timeout" value="${redis.timeout}"></property>
-	</bean>
+		<!-- redis服务器中心 -->
+		<bean id="connectionFactory"
+			class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+			<property name="poolConfig" ref="poolConfig" />
+			<property name="port" value="${redis.port}" />
+			<property name="hostName" value="${redis.host}" />
+			<property name="timeout" value="${redis.timeout}"></property>
+		</bean>
 
-	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
-		<property name="connectionFactory" ref="connectionFactory" />
-		<!-- ? -->
-		<property name="keySerializer">
-			<bean
-				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-		</property>
-		<!-- ? -->
-		<property name="valueSerializer">
-			<bean
-				class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
-		</property>
-	</bean>
+		<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" >
+			<property name="connectionFactory" ref="connectionFactory" />
+			<!-- ? -->
+			<property name="keySerializer">
+				<bean
+					class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+			</property>
+			<!-- ? -->
+			<property name="valueSerializer">
+				<bean
+					class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+			</property>
+		</bean>
 
-	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-		<property name="caches">
-			<set>
-				<bean class="com.yuan.www.config.RedisCache">
-					<property name="redisTemplate" ref="redisTemplate"></property>
-					<property name="name" value="redisCache"></property>
-				</bean>
-			</set>
-		</property>
-	</bean>
-	
+		<!-- <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager"> 
+				<property name="caches"> 
+					<set>
+						<bean class="com.yuan.www.config.RedisCache"> 
+							<property name="redisTemplate" ref="redisTemplate"></property>
+							<property name="name" value="redisCache"></property>
+						</bean> 
+					</set>
+				</property> 
+			</bean> -->
+		<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+			<constructor-arg name="template" ref="redisTemplate"></constructor-arg>
+			<!--指明缓存的名称，在使用@cacheable等注解时，value值在set中选择  -->
+			<!-- <constructor-arg name="cacheNames">
+				<set>
+					<value>redisCache</value>
+				</set> 
+			</constructor-arg>-->
+		</bean>
+
 
 </beans>

@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.Callable;
 
+
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.dao.DataAccessException;
@@ -74,12 +75,14 @@ public class RedisCache implements Cache {
 	@Override
 	public <T> T get(Object key, Class<T> type) {
 		// TODO Auto-generated method stub
+		System.out.println("getobjecttype");
 		return null;
 	}
 
 	@Override
 	public <T> T get(Object key, Callable<T> valueLoader) {
 		// TODO Auto-generated method stub
+		System.out.println("getobjectcallable");
 		return null;
 	}
 

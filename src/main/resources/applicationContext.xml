@@ -10,7 +10,7 @@
      	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd 
      	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd
      	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd"
-	default-lazy-init="true">
+	default-lazy-init="false">
 
 	<!-- 开启注解 -->
 	<context:annotation-config />

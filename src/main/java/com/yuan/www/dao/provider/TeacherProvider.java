@@ -121,6 +121,7 @@ public class TeacherProvider {
 				if (teacher.getSex() != null) {
 					SET("sex=#{sex}");
 				}
+				WHERE("id=#{id}");
 			}
 
 		}.toString();

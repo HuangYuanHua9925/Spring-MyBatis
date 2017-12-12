@@ -17,9 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -42,35 +42,48 @@ public class RedisController {
 	@Autowired
 	private ExaminationsMapper examinationsMapper;
 
-	@RequestMapping(value = "/teacher", method = RequestMethod.POST)
+	// x-www-form-urlencoded:表单格式
+	/**
+	 * http请求参数是application/json的实例
+	 * 
+	 * @title getTeacher
+	 * @target 目的：
+	 * @param teach
+	 * @return Teacher
+	 * @since 2017年12月11日
+	 */
+	@RequestMapping(value = "/teacher", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	// 注意key的赋值方式
-	// @Cacheable(value = "redisCache", key = "'teacher_'+#id")
-	public Teacher getTeacher(@RequestParam(value = "id") int id) {
+	public Teacher getTeacher(@RequestBody Teacher teach) {
 
 		ValueOperations<String, Object> opsForValue = redisTemplate
 				.opsForValue();
 		Object object = opsForValue.get("frist");
 
 		if (object == null) {
-			Teacher teacher = teacherService.selectByPrimaryKey(id);
+			Teacher teacher = teacherService.selectByPrimaryKey(teach.getId());
 			opsForValue.set("frist", teacher);
-			System.out.println(Thread.currentThread().getName() + " 1");
+			System.out.println(new Date() + Thread.currentThread().getName()
+					+ " 1");
 			return teacher;
 		}
-		System.out.println(Thread.currentThread().getName() + " 2");
+		System.out
+				.println(new Date() + Thread.currentThread().getName() + " 2");
 		return (Teacher) object;
 	}
 
 	/**
+	 * 注意key的赋值方式 在没有指定请求方式的时候，get，post，put等方式都可以定位到该方法
+	 * 
 	 * @title getTeacherById
-	 * @target 目的：
+	 * @target 目的：使用restful风格实例
 	 * @param id
 	 * @return ResponseEntity<Teacher>
 	 * @since 2017年12月7日
 	 */
 	@RequestMapping(value = "/teacher/{id}", produces = "application/json;charset=utf-8")
 	@ResponseBody
+	@Cacheable(value = "redisCache", key = "'teacher_'+#id")
 	public Teacher getTeacherById(@PathVariable("id") int id) {
 		Teacher teacher = teacherService.selectByPrimaryKey(id);
 
@@ -103,7 +116,7 @@ public class RedisController {
 	 * @since 2017年12月7日
 	 * 
 	 *        consumes="application/json",需要请求的header有Content-Type=
-	 *        "application/json"，若没有，则会报415错误。 用于指定处理请求的提交内容
+	 *        "application/json"，若没有，则会报415错误。 用于指定处理请求的提交类型
 	 * 
 	 *        produces：要求请求的header中的Accept包含有指定的类型才能生效 用于指定返回内容的类型
 	 */
@@ -120,9 +133,8 @@ public class RedisController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, consumes = "application/json", value = "teacherEntity2", produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, consumes = "application/x-www-form-urlencoded", value = "teacherEntity2", produces = "application/json")
 	public ResponseEntity<Teacher> saveTeacher2(UriComponentsBuilder ucb) {
-
 		HttpHeaders headers = new HttpHeaders();
 		URI location = ucb.path("/test/").path("teacherEntity2/").build()
 				.toUri();
@@ -138,23 +150,29 @@ public class RedisController {
 	@RequestMapping("/exami")
 	@ResponseBody
 	// 需要指定使用哪一个缓存
-	@Cacheable(value = "redisCache")
+	@Cacheable(value = "redisCache1", key = "'com.yuan.www.mvc.RedisController.getExaminations'")
 	public List<Examinations> getExaminations() {
 		Map<String, Object> map = new HashMap<>();
 		map.put("col", "score");
 		return examinationsMapper.selectOrderBy(map);
 	}
 
-	@PutMapping(value = "/putTeacher/{id}", produces = "application/json;charset=utf-8",consumes="application/json")
+	/**
+	 * @title putTeacher
+	 * @target 目的：put请求方式实例
+	 * @param id
+	 * @return int
+	 * @since 2017年12月11日
+	 */
+	@PutMapping(value = "/putTeacher/{id}", produces = "application/json;charset=utf-8", consumes = "application/json")
 	@ResponseBody
 	public int putTeacher(@PathVariable("id") int id) {
-		
+
 		Teacher teacher = teacherService.selectByPrimaryKey(id);
 		if (teacher == null) {
 			throw new TeacherNotFoundException(id);
 		}
 		teacher.setLoginTime(new Date());
-		
 		return teacherService.update(teacher);
 
 	}

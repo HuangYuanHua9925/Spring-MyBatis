@@ -39,6 +39,16 @@
 		<property name="prefix" value="/WEB-INF/pages/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	
+	<!-- <bean id="messageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=utf-8</value>
+				<value>application/json;charset=utf-8</value>
+			</list>
+		</property>
+	</bean> -->
 
 	<!--shiro 注解需要 spring aop支持,这里是开启aop <aop:config proxy-target-class="true"></aop:config> -->
 	<!-- 要添加本行 为什么只有在spring mvc 的配置文件下使用 上下两句，启动aop才生效 -->
