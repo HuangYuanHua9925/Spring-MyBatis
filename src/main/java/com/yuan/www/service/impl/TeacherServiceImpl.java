@@ -10,7 +10,7 @@ import com.yuan.www.model.Teacher;
 import com.yuan.www.service.TeacherService;
 
 @Transactional()
-@Service
+@Service("teacherService")
 public class TeacherServiceImpl implements TeacherService {
 	@Autowired
 	TeacherMapper teacherMapper;

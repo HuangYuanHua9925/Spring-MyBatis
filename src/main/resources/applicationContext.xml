@@ -20,10 +20,10 @@
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
-
+	
 	<import resource="applicationContext-shiro.xml" />
 	<import resource="applicationContext-MyBatis.xml" />
 	<import resource="applicationContext-redis.xml" />
 
-
+	
 </beans>

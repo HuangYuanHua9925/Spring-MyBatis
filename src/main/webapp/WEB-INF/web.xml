@@ -83,7 +83,10 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<!-- 配置前端控制器：dispatcherServlet 结束 -->
-
+	<!-- <servlet-mapping>
+		<servlet-name>hessian</servlet-name>
+		<url-pattern>*.service</url-pattern>
+	</servlet-mapping> -->
 
 </web-app>
 

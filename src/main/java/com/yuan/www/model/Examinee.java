@@ -1,8 +1,9 @@
 package com.yuan.www.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Examinee {
+public class Examinee implements Serializable{
 
 	private Integer id;
 	private String name;
