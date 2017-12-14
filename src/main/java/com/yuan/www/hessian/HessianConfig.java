@@ -25,6 +25,8 @@ public class HessianConfig {
 	public HandlerMapping hessianMapping() {
 		SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
 		Properties mappings = new Properties();
+//		key:url
+//		value:HessianServiceExporter的bean id
 		mappings.setProperty("/hessian.service", "hessianServiceExporter");
 		mapping.setMappings(mappings);
 		return mapping;
